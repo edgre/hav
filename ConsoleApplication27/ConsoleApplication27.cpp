@@ -1,5 +1,9 @@
 ﻿#include <iostream>
 #include <fstream>
+#include <string.h>
+#include <map>
+#include <vector>
+
 using namespace std;
 
 struct Node;
@@ -8,8 +12,10 @@ struct Node
     Node* l;
     Node* next;
     int size;
-    char* key;
-    Node(int n = 0, char key = NULL);
+    string key;
+    Node(int n = 0, char k='\0');
+    Node(int n = 0, string k=NULL);
+    
 };
 
 struct tree
@@ -23,10 +29,22 @@ tree::tree() { first = NULL; last = NULL; }
 
 Node::Node(int n, char k)
 {
-    size = n; key = (char*)k;
+    key = '\0';
+    size = n;
+    key[0] = k;
+    cout << key << endl;
     r = NULL; l = NULL; 
     next = NULL;
 }
+
+Node::Node(int n, string k)
+{
+    size = n;
+    key = k;
+    r = NULL; l = NULL;
+    next = NULL;
+}
+
 
 void Add(tree*b, int n, char key)
 {
@@ -76,15 +94,37 @@ void swap(Node* a, Node* b, tree* c)
    
 }
 
-void newnode(tree* b)
+
+
+void search(std::map<char, vector<char>>& mp, char k, Node* tmp)
 {
-    Node* p = new Node;
-    Node* beg = b->first;
-    p->size = beg->size + beg->next->size;
-    p->key = strcat(beg->key, beg->next->key);
+    if (tmp->l && tmp->r)
+    {
+       
+        if (tmp->l->key.find(k) != -1)
+        {
+            cout << '0';
+            mp[k].push_back('0'); tmp = tmp->l;
+        };
+        if (tmp->r->key.find(k) != -1)
+        {
+            cout << '1';
+            mp[k].push_back('1'); tmp = tmp->r;
+        }
+        search(mp, k, tmp);
+    }
+
+
+}
+
+void newnode(tree* b)
+{   Node* beg = b->first;
+    Node* p = new Node(beg->size + beg->next->size, beg->key + beg->next->key);
+    cout << p->key;
+    cout << endl;
     p->l = beg;
     p->r = beg->next;
-    p->next = beg->next->next;
+    p->next = b->first->next->next;
     b->first = p;
 }
 
@@ -102,16 +142,19 @@ int main()
         fc >> sim;
     };
     tree* b = new tree;
+    
     for (int i = 0; i < 256; i++)
     {
         cout << asc[i] << ' ';
     }
     cout << endl;
      n = 0;
+     map <char, vector<char>> mp;
+     map<char, vector<char>>::iterator it = mp.begin();
      for (int i = 0; i < 256; i++)
      {
          if (asc[i] != 0)
-         {
+         {   
              Add(b, asc[i], (char)i);
              n++;
          }
@@ -119,21 +162,43 @@ int main()
      cout << n << endl;
      out(b);
      cout << endl;
-for (int i = 0; i <= n - 2; i++)
-{
-    Node* tmp = b->first;
-    for (int j = 0; j <= n - 2; j++)
-    { 
+     while (b->first->next != NULL) {
+         n--;
+         for (int i = 0; i <= n - 2; i++)
+         {
+             Node* tmp = b->first;
+             for (int j = 0; j <= n - 2; j++)
+             {
+
+                 if (tmp->size > tmp->next->size)
+                 {
+
+                     swap(tmp, tmp->next, b);
+                 }
+
+             }
+
+         }
+         newnode(b);
+     };
+     cout << b->first->l->l->key << endl;
+     
+     map<char, vector<char>>::iterator it = mp.begin();
+     Node* tmp = b->first;
+     while (it != mp.end())
+     {
+          
+         search(mp, it->first, tmp);
         
-        if (tmp->size > tmp->next->size)
-        {
-            
-            swap(tmp, tmp->next, b);
-        }
+         for (int i = 0; i < mp[it->first].size(); i++)
+             cout << mp[it->first][i];
+         cout << endl;
+         it++;
+     }
+     
+     
 
-       }
 
-   }
-out(b); cout << endl;
-newnode(b); out(b);
+
+
 }
