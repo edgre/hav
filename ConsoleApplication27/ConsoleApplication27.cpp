@@ -98,19 +98,19 @@ void swap(Node* a, Node* b, tree* c)
 
 
 
-void search(std::map<char, vector<char>>& mp, char k, Node* tmp)
+void search(std::map<char, vector<bool>>& mp, char k, Node* tmp)
 {
     if (tmp->l || tmp->r)
     {
 
         if (tmp->l&&tmp->l->key.find(k) != -1)
         {
-            mp[k].push_back('0'); tmp = tmp->l;
+            mp[k].push_back(0); tmp = tmp->l;
         };
         if (tmp->r&&tmp->r->key.find(k) != -1)
         {
 
-            mp[k].push_back('1'); tmp = tmp->r;
+            mp[k].push_back(1); tmp = tmp->r;
         }
         search(mp, k, tmp);
     }
@@ -136,7 +136,6 @@ int main()
     int n = 0;
     for (int i = 0; i < 256; i++) asc[i] = 0;
     fstream fc("текст.txt");
-    fstream fd("TextFile1.txt", ios::in | ios::binary);
     char sim;
     fc >> sim;
     while (fc)
@@ -145,20 +144,19 @@ int main()
         fc >> sim;
     };
     tree* b = new tree;
-
     for (int i = 0; i < 256; i++)
     {
         cout << asc[i] << ' ';
     }
     cout << endl;
     n = 0;
-    map <char, vector<char>> mp;
+    map <char, vector<bool>> mp;
     for (int i = 0; i < 256; i++)
     {
         if (asc[i] != 0)
         {
-            vector <char> vec;
-            mp.insert(pair<char, vector<char>>(char(i), vec));
+            vector <bool> vec;
+            mp.insert(pair<char, vector<bool>>(char(i), vec));
             Add(b, asc[i], (char)i);
             n++;
         }
@@ -167,27 +165,30 @@ int main()
     out(b);
     cout << endl;
     while (b->first->next != NULL) {
-        n--;
+        
         for (int i = 0; i <= n - 2; i++)
         {
+            
             Node* tmp = b->first;
-            for (int j = 0; j <= n - 1; j++)
+            for (int j = 0; j <= n - 2; j++)
             {
 
                 if (tmp->size > tmp->next->size)
                 {
-
+                    Node* t1 = tmp->next;
                     swap(tmp, tmp->next, b);
+                    tmp = t1;
                 }
-
+                tmp = tmp->next;
+               
             }
-            out(b);
-        }
+        } out(b);
         newnode(b);
+        n--;
     };
     cout << b->first->l->l->key << endl;
 
-    map<char, vector<char>>::iterator it = mp.begin();
+    map<char, vector<bool>>::iterator it = mp.begin();
     Node* tmp = b->first;
     while (it != mp.end())
     {
@@ -195,15 +196,39 @@ int main()
         search(mp, it->first, tmp);
         cout << it->first << '-';
         for (int i = 0; i < mp[it->first].size(); i++)
-            cout <<mp[it->first][i];
+            cout << mp[it->first][i];
         cout << endl;
         it++;
 
+
     }
-
-
-
-
-
-
+    char buf = 0;
+    fc.close();
+    fc.open("текст.txt", ios::in);
+    fstream fd("Tекст1.txt", ios::out);
+    it = mp.begin();
+    int siz = 0;
+    fc >> sim;
+    buf = 0;
+    while (fc)
+    { 
+        it = mp.find(sim);
+        for (int i = 0; i < mp[it->first].size(); i++)
+        {
+            cout << mp[it->first][i];
+            buf = buf | mp[it->first][i] << siz;
+            siz++;
+            if (siz == 7)
+            {
+                cout << '-' << (int)buf << endl; siz = 0; fd << buf;
+                buf = 0;
+            } 
+        } 
+        fc >> sim; 
+    }
+    cout << endl;
+    fc >> buf;
+    cout << (int)buf<<endl;
+    fd.close();
 }
+
