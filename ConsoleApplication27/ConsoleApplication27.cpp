@@ -151,18 +151,23 @@ int main()
     cout << endl;
     n = 0;
     map <char, vector<bool>> mp;
+    fstream fd("D:/Текст1.txt", ios::out|ios::binary);
     for (int i = 0; i < 256; i++)
+    
     {
         if (asc[i] != 0)
         {
             vector <bool> vec;
             mp.insert(pair<char, vector<bool>>(char(i), vec));
             Add(b, asc[i], (char)i);
+            fd << char(i); fd << asc[i];
             n++;
         }
     }
+    fd << "+";
     cout << n << endl;
     out(b);
+    int t = n * 2 + 1;
     cout << endl;
     while (b->first->next != NULL) {
         
@@ -205,9 +210,9 @@ int main()
     char buf = 0;
     fc.close();
     fc.open("текст.txt", ios::in);
-    fstream fd("Tекст1.txt", ios::out);
+    
     it = mp.begin();
-    int siz = 0;
+    int siz = 7;
     fc >> sim;
     buf = 0;
     while (fc)
@@ -217,18 +222,24 @@ int main()
         {
             cout << mp[it->first][i];
             buf = buf | mp[it->first][i] << siz;
-            siz++;
-            if (siz == 7)
+            siz--;
+            if (siz < 0)
             {
-                cout << '-' << (int)buf << endl; siz = 0; fd << buf;
+                cout  <<'-'<< (int)buf << endl; siz = 7; fd << buf;
                 buf = 0;
             } 
         } 
         fc >> sim; 
     }
+    fd << buf;
     cout << endl;
-    fc >> buf;
     cout << (int)buf<<endl;
+    fd.close();
+    fd.open("D:/Текст1.txt");
+    t = t;
+    fd.seekp(t, ios::beg);
+    cout << siz<<endl;
+    fd << siz;
     fd.close();
 }
 

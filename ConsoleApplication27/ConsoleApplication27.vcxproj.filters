@@ -21,8 +21,5 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="текст.txt" />
-    <Text Include="Текст1.txt">
-      <Filter>Файлы ресурсов</Filter>
-    </Text>
   </ItemGroup>
 </Project>
