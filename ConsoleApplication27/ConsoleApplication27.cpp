@@ -126,9 +126,16 @@ void newnode(tree* b)
     cout << endl;
     p->l = beg;
     p->r = beg->next;
-    p->next = b->first->next->next;
-    b->first = p;
-}
+    
+    Node *tmp = b->first->next;
+   
+            while (tmp != b->last && tmp->next->size < p->size) tmp = tmp->next;
+            p->next = tmp->next; tmp->next = p;
+            if (tmp == b->last) b->last = p;
+            if (!(b->first->next->next)) b->first = p;
+            else 
+            b->first = b->first->next->next;
+} 
 
 int main()
 {
@@ -151,9 +158,9 @@ int main()
     cout << endl;
     n = 0;
     map <char, vector<bool>> mp;
-    fstream fd("D:/Текст1.txt", ios::out|ios::binary);
+    fstream fd("D:/Текст1.txt", ios::out | ios::binary);
     for (int i = 0; i < 256; i++)
-    
+
     {
         if (asc[i] != 0)
         {
@@ -164,34 +171,37 @@ int main()
             n++;
         }
     }
-    fd << "+";
+    fd << "+"; fd << ' ';
     cout << n << endl;
     out(b);
     int t = n * 2 + 1;
     cout << endl;
-    while (b->first->next != NULL) {
-        
-        for (int i = 0; i <= n - 2; i++)
-        {
-            
-            Node* tmp = b->first;
-            for (int j = 0; j <= n - 2; j++)
-            {
 
-                if (tmp->size > tmp->next->size)
-                {
-                    Node* t1 = tmp->next;
-                    swap(tmp, tmp->next, b);
-                    tmp = t1;
-                }
-                tmp = tmp->next;
-               
+
+    for (int i = 0; i <= n - 2; i++)
+    {
+
+        Node* tmp = b->first;
+        for (int j = 0; j <= n - 2; j++)
+        {
+
+            if (tmp->size > tmp->next->size)
+            {
+                Node* t1 = tmp->next;
+                swap(tmp, tmp->next, b);
+                tmp = t1;
             }
-        } out(b);
+            tmp = tmp->next;
+
+        }
+    } out(b);
+    while (b->first->next != NULL)
+    {
         newnode(b);
-        n--;
-    };
-    cout << b->first->l->l->key << endl;
+        out(b);
+    }
+    out(b);
+
 
     map<char, vector<bool>>::iterator it = mp.begin();
     Node* tmp = b->first;
@@ -210,13 +220,13 @@ int main()
     char buf = 0;
     fc.close();
     fc.open("текст.txt", ios::in);
-    
+
     it = mp.begin();
     int siz = 7;
     fc >> sim;
     buf = 0;
     while (fc)
-    { 
+    {
         it = mp.find(sim);
         for (int i = 0; i < mp[it->first].size(); i++)
         {
@@ -225,20 +235,20 @@ int main()
             siz--;
             if (siz < 0)
             {
-                cout  <<'-'<< (int)buf << endl; siz = 7; fd << buf;
+                cout << '-' << (int)buf << endl; siz = 7; fd << buf;
                 buf = 0;
-            } 
-        } 
-        fc >> sim; 
+            }
+        }
+        fc >> sim;
     }
-    fd << buf;
-    cout << endl;
-    cout << (int)buf<<endl;
+    if (buf!=0) fd << buf;
     fd.close();
     fd.open("D:/Текст1.txt");
-    t = t;
+    cout << endl;
     fd.seekp(t, ios::beg);
-    cout << siz<<endl;
+    
+    
+    cout << siz << endl;
     fd << siz;
     fd.close();
 }

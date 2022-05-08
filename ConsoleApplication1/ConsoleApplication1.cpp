@@ -89,43 +89,53 @@ void newnode(tree* b)
     cout << endl;
     p->l = beg;
     p->r = beg->next;
-    p->next = b->first->next->next;
-    b->first = p;
+
+    Node* tmp = b->first->next;
+
+    while (tmp != b->last && tmp->next->size < p->size) tmp = tmp->next;
+    p->next = tmp->next; tmp->next = p;
+    if (tmp == b->last) b->last = p;
+    if (!(b->first->next->next)) b->first = p;
+    else
+        b->first = b->first->next->next;
+    
 }
 
 void dec(tree* b, fstream& fd)
 {
     int t;
     fd >> t;
+    cout << t << endl;
     fstream fk("текст.txt", ios::out);
     Node* tmp = b->first;
     char buf, bu;
     fd >> buf;
+    cout << buf << endl;
     while (fd)
     {
-        
         for (int i = 7; i >= 0; i--)
         {
-            if (!(tmp->l))
+            if (fd >> bu || i >= t)
             {
-                cout << ' ' << tmp->key << endl; fk << tmp->key; tmp = b->first;
-            }
-            if (fd >> bu||i!=t) {
-     
                 if (buf & 1 << i) {
                     tmp = tmp->r; cout << '1';
                 }
                 else {
                     tmp = tmp->l; cout << '0';
                 }
+                if (!(tmp->l))
+                {
+                    cout << ' ' << tmp->key << endl; fk << tmp->key; tmp = b->first;
+                }
                 fd.seekg(-1, ios::cur);
             }
         }
-        fd >> buf; 
+fd >> buf;
     }
     
-    
 }
+
+   
 
 
 void out(tree* b)
@@ -156,10 +166,8 @@ int main()
         fc >> key;
     }
     out(b);
-    int t = 2 * n + 1;
-    while (b->first->next != NULL) {
-
-        for (int i = 0; i <= n - 2; i++)
+    int t = n * 2 + 1;
+         for (int i = 0; i <= n - 2; i++)
         {
 
             Node* tmp = b->first;
@@ -176,10 +184,14 @@ int main()
 
             }
         } out(b);
-        newnode(b);
-        n--;
-    };
-    
+        while (b -> first->next!= NULL)
+        {
+            newnode(b);
+            out(b);
+            cout << b->first->key << endl;
+        }
+
+    cout << b->first->key<<endl;
     fc.seekg(t, ios::beg);
     dec(b, fc);
     
