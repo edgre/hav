@@ -171,7 +171,7 @@ int main()
             n++;
         }
     }
-    fd << "+"; fd << ' ';
+    fd << "|"; fd << '|'; fd << ' ';
     cout << n << endl;
     out(b);
     int t = n * 2 + 1;
@@ -241,13 +241,12 @@ int main()
         }
         fc >> sim;
     }
-    if (buf!=0) fd << buf;
+    if (siz != 7) fd << buf;
+    else siz = -1;
     fd.close();
     fd.open("D:/Текст1.txt");
     cout << endl;
-    fd.seekp(t, ios::beg);
-    
-    
+    fd.seekp(t+1, ios::beg);
     cout << siz << endl;
     fd << siz;
     fd.close();

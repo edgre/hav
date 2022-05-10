@@ -115,7 +115,7 @@ void dec(tree* b, fstream& fd)
     {
         for (int i = 7; i >= 0; i--)
         {
-            if (fd >> bu || i >= t)
+            if (fd >> bu || i >= t+1)
             {
                 if (buf & 1 << i) {
                     tmp = tmp->r; cout << '1';
@@ -158,12 +158,15 @@ int main()
     int n = 0;
     fstream fc("D:/Текст1.txt");
     fc >> key;
-    while (key != '+')
-    {
-        fc >> size;
+    fc >> size;
+    
+    while (key != '|'&&size!='|')
+    {   
         n++;
         Add(b, size, key);
         fc >> key;
+        fc >> size;
+        cout << size << endl;
     }
     out(b);
     int t = n * 2 + 1;
@@ -191,8 +194,9 @@ int main()
             cout << b->first->key << endl;
         }
 
-    cout << b->first->key<<endl;
-    fc.seekg(t, ios::beg);
+    fc.close();
+    fc.open("D:/Текст1.txt");
+    fc.seekg(t+1, ios::beg);
     dec(b, fc);
     
     
