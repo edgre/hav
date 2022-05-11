@@ -33,7 +33,6 @@ Node::Node(int n, char k)
     key = '\0';
     size = n;
     key[0] = k;
-    cout << key << endl;
     r = NULL; l = NULL;
     next = NULL;
 }
@@ -68,10 +67,8 @@ void out(tree* b)
     tmp = b->first;
     while (tmp)
     {
-        cout <<tmp->key<<'-'<< tmp->size << ' ';
         tmp = tmp->next;
     }
-    cout << endl;
 }
 
 void swap(Node* a, Node* b, tree* c)
@@ -121,15 +118,16 @@ void search(std::map<char, vector<bool>>& mp, char k, Node* tmp)
 void newnode(tree* b)
 {
     Node* beg = b->first;
-    Node* p = new Node(beg->size + beg->next->size, beg->key + beg->next->key);
+    Node* p = new Node(beg->size + beg->next->size,
+        beg->key + beg->next->key);
     
-    cout << endl;
     p->l = beg;
     p->r = beg->next;
     
     Node *tmp = b->first->next;
    
-            while (tmp != b->last && tmp->next->size < p->size) tmp = tmp->next;
+            while (tmp != b->last && tmp->next->size < p->size)
+                tmp = tmp->next;
             p->next = tmp->next; tmp->next = p;
             if (tmp == b->last) b->last = p;
             if (!(b->first->next->next)) b->first = p;
@@ -151,11 +149,6 @@ int main()
         fc >> sim;
     };
     tree* b = new tree;
-    for (int i = 0; i < 256; i++)
-    {
-        cout << asc[i] << ' ';
-    }
-    cout << endl;
     n = 0;
     map <char, vector<bool>> mp;
     fstream fd("D:/Текст1.txt", ios::out | ios::binary);
@@ -172,10 +165,7 @@ int main()
         }
     }
     fd << "|"; fd << '|'; fd << ' ';
-    cout << n << endl;
-    out(b);
-    int t = n * 2 + 1;
-    cout << endl;
+    int t = n * 2 + 2;
 
 
     for (int i = 0; i <= n - 2; i++)
@@ -194,25 +184,19 @@ int main()
             tmp = tmp->next;
 
         }
-    } out(b);
+    } 
     while (b->first->next != NULL)
     {
         newnode(b);
-        out(b);
     }
-    out(b);
 
 
     map<char, vector<bool>>::iterator it = mp.begin();
     Node* tmp = b->first;
     while (it != mp.end())
     {
-        cout << it->first << endl;
         search(mp, it->first, tmp);
-        cout << it->first << '-';
-        for (int i = 0; i < mp[it->first].size(); i++)
-            cout << mp[it->first][i];
-        cout << endl;
+        
         it++;
 
 
@@ -230,13 +214,14 @@ int main()
         it = mp.find(sim);
         for (int i = 0; i < mp[it->first].size(); i++)
         {
-            cout << mp[it->first][i];
+           
             buf = buf | mp[it->first][i] << siz;
+            cout << mp[it->first][i];
             siz--;
             if (siz < 0)
             {
-                cout << '-' << (int)buf << endl; siz = 7; fd << buf;
-                buf = 0;
+                siz = 7; fd << buf; buf = 0; cout << endl;
+                
             }
         }
         fc >> sim;
@@ -245,10 +230,8 @@ int main()
     else siz = -1;
     fd.close();
     fd.open("D:/Текст1.txt");
-    cout << endl;
-    fd.seekp(t+1, ios::beg);
-    cout << siz << endl;
-    fd << siz;
+    fd.seekp(t, ios::beg);
+    fd << siz+1;
     fd.close();
 }
 

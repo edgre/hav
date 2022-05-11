@@ -42,7 +42,6 @@ Node::Node(int n, char k)
     key = '\0';
     size = n;
     key[0] = k;
-    cout << key << endl;
     r = NULL; l = NULL;
     next = NULL;
 }
@@ -86,7 +85,6 @@ void newnode(tree* b)
     Node* beg = b->first;
     Node* p = new Node(beg->size + beg->next->size, beg->key + beg->next->key);
 
-    cout << endl;
     p->l = beg;
     p->r = beg->next;
 
@@ -103,41 +101,39 @@ void newnode(tree* b)
 
 void dec(tree* b, fstream& fd)
 {
-    int t;
-    fd >> t;
-    cout << t << endl;
-    fstream fk("текст.txt", ios::out);
-    Node* tmp = b->first;
-    char buf, bu;
-    fd >> buf;
-    cout << buf << endl;
-    while (fd)
-    {
-        for (int i = 7; i >= 0; i--)
-        {
-            if (fd >> bu || i >= t+1)
-            {
-                if (buf & 1 << i) {
-                    tmp = tmp->r; cout << '1';
-                }
-                else {
-                    tmp = tmp->l; cout << '0';
-                }
-                if (!(tmp->l))
-                {
-                    cout << ' ' << tmp->key << endl; fk << tmp->key; tmp = b->first;
-                }
-                fd.seekg(-1, ios::cur);
-            }
-        }
-fd >> buf;
-    }
-    
-}
-
    
+        int t;
+        fd >> t;
+        cout << t << endl;
+        fstream fk("итог.txt", ios::out);
+        Node* tmp = b->first;
+        char buf, bu;
+        fd >> buf;
+        cout << buf << endl;
+        while (fd)
+        {
+            for (int i = 7; i >= 0; i--)
+            {
+                if (fd >> bu || i >= t)
+                {
+                    if (buf & 1 << i) {
+                        tmp = tmp->r; cout << '1';
+                    }
+                    else {
+                        tmp = tmp->l; cout << '0';
+                    }
+                    if (!(tmp->l))
+                    {
+                        cout << ' ' << tmp->key << endl; fk << tmp->key; tmp = b->first;
+                    }
+                    fd.seekg(-1, ios::cur);
+                }
+            }
+            fd >> buf;
+        }
 
-
+    }
+   
 void out(tree* b)
 {
     int u = 0;
@@ -166,10 +162,8 @@ int main()
         Add(b, size, key);
         fc >> key;
         fc >> size;
-        cout << size << endl;
     }
-    out(b);
-    int t = n * 2 + 1;
+    int t = n * 2 + 2;
          for (int i = 0; i <= n - 2; i++)
         {
 
@@ -186,17 +180,16 @@ int main()
                 tmp = tmp->next;
 
             }
-        } out(b);
+        } 
         while (b -> first->next!= NULL)
         {
             newnode(b);
-            out(b);
-            cout << b->first->key << endl;
+        
         }
 
     fc.close();
     fc.open("D:/Текст1.txt");
-    fc.seekg(t+1, ios::beg);
+    fc.seekg(t, ios::beg);
     dec(b, fc);
     
     
