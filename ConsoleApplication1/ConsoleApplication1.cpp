@@ -110,11 +110,13 @@ void dec(tree* b, fstream& fd)
         char buf, bu;
         fd >> buf;
         cout << buf << endl;
+        int pr = 0;
         while (fd)
         {
+            if (!(fd >> bu))  pr = 1;
             for (int i = 7; i >= 0; i--)
             {
-                if (fd >> bu || i >= t)
+               if (pr = 0 || i >= t)
                 {
                     if (buf & 1 << i) {
                         tmp = tmp->r; cout << '1';
@@ -126,9 +128,10 @@ void dec(tree* b, fstream& fd)
                     {
                         cout << ' ' << tmp->key << endl; fk << tmp->key; tmp = b->first;
                     }
-                    fd.seekg(-1, ios::cur);
+                    
                 }
-            }
+            } 
+            fd.seekg(-1, ios::cur);
             fd >> buf;
         }
 
@@ -191,7 +194,10 @@ int main()
     fc.open("D:/Текст1.txt");
     fc.seekg(t, ios::beg);
     dec(b, fc);
-    
+    ifstream fs("текст.txt");
+    char e;
+    fs >> e;
+    cout << e;
     
 
 }

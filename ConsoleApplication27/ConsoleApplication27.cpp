@@ -143,17 +143,18 @@ int main()
     fstream fc("текст.txt");
     char sim;
     fc >> sim;
-    while (fc)
+    while (fc) // заполняем ассоциированный массив
     {
-        asc[(int)sim]++;
+        asc[(int)sim]++; 
         fc >> sim;
     };
     tree* b = new tree;
     n = 0;
     map <char, vector<bool>> mp;
-    fstream fd("D:/Текст1.txt", ios::out | ios::binary);
-    for (int i = 0; i < 256; i++)
-
+    fstream fd("D:/Текст1.txt", ios::out);
+    /* ненулевые элементы заносим в листья дерева, в ключи мапы и в файл*/  
+    for (int i = 0; i < 256; i++) 
+ 
     {
         if (asc[i] != 0)
         {
@@ -172,7 +173,7 @@ int main()
     {
 
         Node* tmp = b->first;
-        for (int j = 0; j <= n - 2; j++)
+        for (int j = 0; j <= n - 2; j++) // сортируем листья дерева
         {
 
             if (tmp->size > tmp->next->size)
@@ -186,19 +187,19 @@ int main()
         }
     } 
     while (b->first->next != NULL)
-    {
+    {   
         newnode(b);
     }
 
 
     map<char, vector<bool>>::iterator it = mp.begin();
     Node* tmp = b->first;
+    // заполняем мапу кодами символов
     while (it != mp.end())
     {
         search(mp, it->first, tmp);
         
         it++;
-
 
     }
     char buf = 0;
@@ -233,5 +234,7 @@ int main()
     fd.seekp(t, ios::beg);
     fd << siz+1;
     fd.close();
+    ifstream fs("текст.txt");
+    
 }
 
