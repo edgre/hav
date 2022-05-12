@@ -3,6 +3,7 @@
 #include <string.h>
 #include <map>
 #include <vector>
+#include <locale.h>
 
 using namespace std;
 
@@ -99,40 +100,41 @@ void newnode(tree* b)
     
 }
 
-void dec(tree* b, fstream& fd)
+void dec(tree* b, fstream& fd, int& weig)
 {
-   
+       
         int t;
-        fd >> t;
-        cout << t << endl;
+        fd >> t;// считываем количество незначащих нулей
+        weig++;
         fstream fk("итог.txt", ios::out);
         Node* tmp = b->first;
         char buf, bu;
-        fd >> buf;
-        cout << buf << endl;
+        fd.get(buf);
         int pr = 0;
         while (fd)
         {
-            if (!(fd >> bu))  pr = 1;
+            if (!(fd.get(bu)))  pr = 1;// проверяем является ли текущий символ последним
             for (int i = 7; i >= 0; i--)
             {
-               if (pr = 0 || i >= t)
+               if (pr == 0 || i >= t)
                 {
                     if (buf & 1 << i) {
-                        tmp = tmp->r; cout << '1';
+                        tmp = tmp->r; //cout << '1';
                     }
                     else {
-                        tmp = tmp->l; cout << '0';
+                        tmp = tmp->l; //cout << '0';
                     }
                     if (!(tmp->l))
                     {
-                        cout << ' ' << tmp->key << endl; fk << tmp->key; tmp = b->first;
+                         fk << tmp->key; tmp = b->first;/*cout << endl*/
                     }
                     
                 }
             } 
-            fd.seekg(-1, ios::cur);
-            fd >> buf;
+            fd.seekg(-1, ios::cur);//переходим на один символ назад (компенсируем проверку)
+            fd.get(buf);
+            weig++;//ведем подсчет символов в сжатом файле
+
         }
 
     }
@@ -147,26 +149,57 @@ void out(tree* b)
         cout << tmp->key << '-' << tmp->size << ' ';
         tmp = tmp->next;
     }
-    cout << endl;
+    
+}
+
+bool proof()
+{
+    fstream fc("итог.txt");
+    fstream fs("C:/Users/Дима и Егор/Source/repos/edgre/hav/ConsoleApplication27/текст.txt");
+    char sim, sim1;
+    fc.get(sim); fs.get(sim1);
+    while (fs || fc)
+    { 
+      if (sim != sim1) return false;
+        fc.get(sim); fs.get(sim1);
+        
+    }
+    return true;
+}
+
+void weigh(int t)
+{
+    fstream fs("C:/Users/Дима и Егор/Source/repos/edgre/hav/ConsoleApplication27/текст.txt");
+    char buf; int r = 0;
+    
+    while (fs) 
+    {
+        r++; fs.get(buf);
+    }
+    cout << "исходный файл -" << r * 8 << endl;
+    cout << "сжатый файл -" << t * 8 << endl;
+
 }
 
 int main()
 {
+    setlocale(LC_ALL, "Russian");
     tree* b = new tree;
     char key; int size;
     int n = 0;
-    fstream fc("D:/Текст1.txt");
-    fc >> key;
-    fc >> size;
-    
+    fstream fc("C:/Users/Дима и Егор/Source/repos/edgre/hav/Текст1.txt");
+    fc.get(key);
+    fc>>size;
+    // читаем данные из шапки (символы исходного текста и их частоты)
     while (key != '|'&&size!='|')
     {   
         n++;
         Add(b, size, key);
-        fc >> key;
-        fc >> size;
+        fc.get(key);
+        fc>>size;
     }
     int t = n * 2 + 2;
+    // формируем дерево
          for (int i = 0; i <= n - 2; i++)
         {
 
@@ -189,15 +222,15 @@ int main()
             newnode(b);
         
         }
-
     fc.close();
-    fc.open("D:/Текст1.txt");
-    fc.seekg(t, ios::beg);
-    dec(b, fc);
-    ifstream fs("текст.txt");
-    char e;
-    fs >> e;
-    cout << e;
+    fc.open("C:/Users/Дима и Егор/Source/repos/edgre/hav/Текст1.txt");
+    fc.seekg(t, ios::beg);// пропускаем шапку и переходим к коду
+    dec(b, fc, t);// декодируем текст
+    
+    fc.close();
+    if (proof()) cout << "совпали" << endl;;
+    weigh(t);
+    
     
 
 }

@@ -94,7 +94,7 @@ void swap(Node* a, Node* b, tree* c)
 }
 
 
-
+/*функция проходит формирует код символа по дереву*/
 void search(std::map<char, vector<bool>>& mp, char k, Node* tmp)
 {
     if (tmp->l || tmp->r)
@@ -104,19 +104,20 @@ void search(std::map<char, vector<bool>>& mp, char k, Node* tmp)
         {
             mp[k].push_back(0); tmp = tmp->l;
         };
-        if (tmp->r&&tmp->r->key.find(k) != -1)
+        if (tmp->r && tmp->r->key.find(k) != -1)
         {
 
             mp[k].push_back(1); tmp = tmp->r;
         }
         search(mp, k, tmp);
+        
     }
 
 
 }
 
 void newnode(tree* b)
-{
+{   // создаем предка для двух узлов с наименьшим весом
     Node* beg = b->first;
     Node* p = new Node(beg->size + beg->next->size,
         beg->key + beg->next->key);
@@ -125,7 +126,7 @@ void newnode(tree* b)
     p->r = beg->next;
     
     Node *tmp = b->first->next;
-   
+   // помещаем его на нужную позицию
             while (tmp != b->last && tmp->next->size < p->size)
                 tmp = tmp->next;
             p->next = tmp->next; tmp->next = p;
@@ -146,12 +147,12 @@ int main()
     while (fc) // заполняем ассоциированный массив
     {
         asc[(int)sim]++; 
-        fc >> sim;
+        fc.get(sim);
     };
     tree* b = new tree;
     n = 0;
     map <char, vector<bool>> mp;
-    fstream fd("D:/Текст1.txt", ios::out);
+    fstream fd("C:/Users/Дима и Егор/Source/repos/edgre/hav/Текст1.txt", ios::out);
     /* ненулевые элементы заносим в листья дерева, в ключи мапы и в файл*/  
     for (int i = 0; i < 256; i++) 
  
@@ -208,33 +209,31 @@ int main()
 
     it = mp.begin();
     int siz = 7;
-    fc >> sim;
-    buf = 0;
+    fc.get(sim);
+    buf = 0; // начиная справа, формируем символ из получившихся кодов
     while (fc)
-    {
+    {   
         it = mp.find(sim);
         for (int i = 0; i < mp[it->first].size(); i++)
         {
-           
             buf = buf | mp[it->first][i] << siz;
-            cout << mp[it->first][i];
             siz--;
             if (siz < 0)
             {
-                siz = 7; fd << buf; buf = 0; cout << endl;
+                 siz = 7; fd << buf; buf = 0;
                 
             }
         }
-        fc >> sim;
+        fc.get(sim); 
     }
-    if (siz != 7) fd << buf;
-    else siz = -1;
+    if (siz != 7) fd << buf; // заносим последний (неполный) символ
+    else siz = -1; //если неполных нет, то незначащие нули в конце не учитываем
     fd.close();
-    fd.open("D:/Текст1.txt");
+    fd.open("C:/Users/Дима и Егор/Source/repos/edgre/hav/Текст1.txt");
     fd.seekp(t, ios::beg);
-    fd << siz+1;
+    fd << siz+1;//ззаносим в файл количество незначащих нулей
     fd.close();
-    ifstream fs("текст.txt");
+    
     
 }
 
