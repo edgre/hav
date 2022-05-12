@@ -100,23 +100,23 @@ void newnode(tree* b)
     
 }
 
-void dec(tree* b, fstream& fd, int& weig)
+void dec(tree* b, int t, int &weigh)
 {
-       
-        int t;
-        fd >> t;// считываем количество незначащих нулей
-        weig++;
+        
         fstream fk("итог.txt", ios::out);
+        ifstream fd("C:/Users/Дима и Егор/Source/repos/edgre/hav/код.txt");
         Node* tmp = b->first;
         char buf, bu;
-        fd.get(buf);
+        fd >> buf; weigh++;
+        cout << (int)buf << endl;
         int pr = 0;
         while (fd)
         {
-            if (!(fd.get(bu)))  pr = 1;// проверяем является ли текущий символ последним
+            if (!(fd>>bu))  pr = 1;// проверяем является ли текущий символ последним
+            cout << (int)bu << endl;
             for (int i = 7; i >= 0; i--)
             {
-               if (pr == 0 || i >= t)
+                if (pr == 0 || i >= t)
                 {
                     if (buf & 1 << i) {
                         tmp = tmp->r; //cout << '1';
@@ -126,16 +126,17 @@ void dec(tree* b, fstream& fd, int& weig)
                     }
                     if (!(tmp->l))
                     {
-                         fk << tmp->key; tmp = b->first;/*cout << endl*/
+                        fk << tmp->key; tmp = b->first;/*cout << endl*/
                     }
-                    
-                }
-            } 
-            fd.seekg(-1, ios::cur);//переходим на один символ назад (компенсируем проверку)
-            fd.get(buf);
-            weig++;//ведем подсчет символов в сжатом файле
 
+                }
+            }
+           //переходим на один символ назад (компенсируем проверку)
+            buf = bu; weigh++;
+             //переходим на один символ назад (компенсируем проверку)
+           cout <<'-'<< (int)buf << endl;
         }
+        
 
     }
    
@@ -187,7 +188,7 @@ int main()
     tree* b = new tree;
     char key; int size;
     int n = 0;
-    fstream fc("C:/Users/Дима и Егор/Source/repos/edgre/hav/код.txt");
+    fstream fc("C:/Users/Дима и Егор/Source/repos/edgre/hav/частоты.txt");
     fc.get(key);
     fc>>size;
     // читаем данные из шапки (символы исходного текста и их частоты)
@@ -222,14 +223,17 @@ int main()
             newnode(b);
         
         }
-    fc.close();
-    fc.open("C:/Users/Дима и Егор/Source/repos/edgre/hav/код.txt");
-    fc.seekg(t, ios::beg);// пропускаем шапку и переходим к коду
-    dec(b, fc, t);// декодируем текст
+        out(b); cout << endl;
+        fc.close();
+        fc.open("C:/Users/Дима и Егор/Source/repos/edgre/hav/частоты.txt");
+        fc.seekg(-1, ios::end);
+        fc >> t; cout << t << endl;
+        fc.close(); int mas = 0;
+        dec(b,t, mas);// декодируем текст
     
     fc.close();
     if (proof()) cout << "совпали" << endl;;
-    weigh(t);
+    weigh(mas);
     
     
 
