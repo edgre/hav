@@ -141,7 +141,7 @@ int main()
     int asc[256];
     int n = 0;
     for (int i = 0; i < 256; i++) asc[i] = 0;
-    fstream fc("текст.txt");
+    fstream fc("исходный текст.txt");
     char sim;
     fc >> sim;
     while (fc) // заполняем ассоциированный массив
@@ -152,7 +152,7 @@ int main()
     tree* b = new tree;
     n = 0;
     map <char, vector<bool>> mp;
-    fstream fd("C:/Users/Дима и Егор/Source/repos/edgre/hav/Текст1.txt", ios::out);
+    fstream fd("C:/Users/Дима и Егор/Source/repos/edgre/hav/код.txt", ios::out);
     /* ненулевые элементы заносим в листья дерева, в ключи мапы и в файл*/  
     for (int i = 0; i < 256; i++) 
  
@@ -205,7 +205,7 @@ int main()
     }
     char buf = 0;
     fc.close();
-    fc.open("текст.txt", ios::in);
+    fc.open("исходный текст.txt", ios::in);
 
     it = mp.begin();
     int siz = 7;
@@ -229,7 +229,7 @@ int main()
     if (siz != 7) fd << buf; // заносим последний (неполный) символ
     else siz = -1; //если неполных нет, то незначащие нули в конце не учитываем
     fd.close();
-    fd.open("C:/Users/Дима и Егор/Source/repos/edgre/hav/Текст1.txt");
+    fd.open("C:/Users/Дима и Егор/Source/repos/edgre/hav/код.txt");
     fd.seekp(t, ios::beg);
     fd << siz+1;//ззаносим в файл количество незначащих нулей
     fd.close();

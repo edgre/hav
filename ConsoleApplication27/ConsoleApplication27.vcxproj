@@ -24,6 +24,7 @@
     <ProjectGuid>{46497573-e227-45c5-814d-6e0937dda642}</ProjectGuid>
     <RootNamespace>ConsoleApplication27</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>coder</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -142,8 +143,8 @@
     <ClCompile Include="ConsoleApplication27.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\Текст1.txt" />
-    <Text Include="текст.txt" />
+    <Text Include="..\код.txt" />
+    <Text Include="исходный текст.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

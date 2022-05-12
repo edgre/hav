@@ -20,7 +20,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="текст.txt" />
-    <Text Include="..\Текст1.txt" />
+    <Text Include="исходный текст.txt" />
+    <Text Include="..\код.txt" />
   </ItemGroup>
 </Project>

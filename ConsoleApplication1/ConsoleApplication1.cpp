@@ -155,7 +155,7 @@ void out(tree* b)
 bool proof()
 {
     fstream fc("итог.txt");
-    fstream fs("C:/Users/Дима и Егор/Source/repos/edgre/hav/ConsoleApplication27/текст.txt");
+    fstream fs("C:/Users/Дима и Егор/Source/repos/edgre/hav/ConsoleApplication27/исходный текст.txt");
     char sim, sim1;
     fc.get(sim); fs.get(sim1);
     while (fs || fc)
@@ -169,7 +169,7 @@ bool proof()
 
 void weigh(int t)
 {
-    fstream fs("C:/Users/Дима и Егор/Source/repos/edgre/hav/ConsoleApplication27/текст.txt");
+    fstream fs("C:/Users/Дима и Егор/Source/repos/edgre/hav/ConsoleApplication27/исходный текст.txt");
     char buf; int r = 0;
     
     while (fs) 
@@ -187,7 +187,7 @@ int main()
     tree* b = new tree;
     char key; int size;
     int n = 0;
-    fstream fc("C:/Users/Дима и Егор/Source/repos/edgre/hav/Текст1.txt");
+    fstream fc("C:/Users/Дима и Егор/Source/repos/edgre/hav/код.txt");
     fc.get(key);
     fc>>size;
     // читаем данные из шапки (символы исходного текста и их частоты)
@@ -223,7 +223,7 @@ int main()
         
         }
     fc.close();
-    fc.open("C:/Users/Дима и Егор/Source/repos/edgre/hav/Текст1.txt");
+    fc.open("C:/Users/Дима и Егор/Source/repos/edgre/hav/код.txt");
     fc.seekg(t, ios::beg);// пропускаем шапку и переходим к коду
     dec(b, fc, t);// декодируем текст
     
