@@ -104,25 +104,27 @@ void dec(tree* b, int t, int &weigh)
 {
         
         fstream fk("итог.txt", ios::out);
-        ifstream fd("C:/Users/Дима и Егор/Source/repos/edgre/hav/код.txt");
+        ifstream fd("C:/Users/Дима и Егор/Source/repos/edgre/hav/код.txt", ios::binary);
         Node* tmp = b->first;
         char buf, bu;
-        fd >> buf; weigh++;
-        cout << (int)buf << endl;
+        fd.get(buf); weigh++;
         int pr = 0;
+        bu = 0;
         while (fd)
         {
-            if (!(fd>>bu))  pr = 1;// проверяем является ли текущий символ последним
-            cout << (int)bu << endl;
+            if (!(fd.get(bu)))  pr = 1;// проверяем является ли текущий символ последним
+            
+            
             for (int i = 7; i >= 0; i--)
             {
-                if (pr == 0 || i >= t)
+                if (pr == 0 || i >= t) 
+                    // в последнем остананвливаемся на незначащих нулях
                 {
                     if (buf & 1 << i) {
-                        tmp = tmp->r; //cout << '1';
+                        tmp = tmp->r; /*cout << '1';*/
                     }
                     else {
-                        tmp = tmp->l; //cout << '0';
+                        tmp = tmp->l; /*cout << '0';*/
                     }
                     if (!(tmp->l))
                     {
@@ -131,10 +133,11 @@ void dec(tree* b, int t, int &weigh)
 
                 }
             }
-           //переходим на один символ назад (компенсируем проверку)
-            buf = bu; weigh++;
-             //переходим на один символ назад (компенсируем проверку)
-           cout <<'-'<< (int)buf << endl;
+           
+            buf = bu;
+            if((int)buf==13) fd.get(buf); weigh++;
+           
+           
         }
         
 
@@ -191,7 +194,7 @@ int main()
     fstream fc("C:/Users/Дима и Егор/Source/repos/edgre/hav/частоты.txt");
     fc.get(key);
     fc>>size;
-    // читаем данные из шапки (символы исходного текста и их частоты)
+    // считываем символы исходного текста и их частоты
     while (key != '|'&&size!='|')
     {   
         n++;
@@ -223,16 +226,17 @@ int main()
             newnode(b);
         
         }
-        out(b); cout << endl;
         fc.close();
         fc.open("C:/Users/Дима и Егор/Source/repos/edgre/hav/частоты.txt");
         fc.seekg(-1, ios::end);
-        fc >> t; cout << t << endl;
+        fc >> t; // считываем количество незначащих нулей
+        /*cout << t << endl;*/
         fc.close(); int mas = 0;
         dec(b,t, mas);// декодируем текст
     
     fc.close();
-    if (proof()) cout << "совпали" << endl;;
+    if (proof()) cout << "совпали" << endl;
+    else cout << "не совпали";
     weigh(mas);
     
     

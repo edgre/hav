@@ -153,6 +153,7 @@ int main()
     n = 0;
     map <char, vector<bool>> mp;
     fstream fd("C:/Users/Дима и Егор/Source/repos/edgre/hav/код.txt", ios::out);
+    // файл для записи частот исходнго текста
     fstream fd1("C:/Users/Дима и Егор/Source/repos/edgre/hav/частоты.txt", ios::out);
     /* ненулевые элементы заносим в листья дерева, в ключи мапы и в файл*/  
     for (int i = 0; i < 256; i++) 
@@ -197,10 +198,10 @@ int main()
     while (it != mp.end())
     {
         search(mp, it->first, tmp);
-        cout << it->first<<'-';
+        /*cout << it->first<<'-';
         for (int i =0 ; i < mp[it->first].size(); i++)
             cout << mp[it->first][i];
-        cout << endl;
+        cout << endl;*/
         it++;
 
     }
@@ -212,26 +213,25 @@ int main()
     int siz = 7;
     fc.get(sim);
     buf = 0; // начиная справа, формируем символ из получившихся кодов
-    int y = 0;
+    
     while (fc)
     {   
         it = mp.find(sim);
         for (int i = 0; i < mp[it->first].size(); i++)
         {
             buf = buf | mp[it->first][i] << siz;
-            cout << mp[it->first][i];
+            /*cout << mp[it->first][i];*/
             siz--;
             if (siz < 0)
             {
-                siz = 7; cout <<'-'<< (int)buf << endl; fd << buf; buf = 0; 
+                siz = 7; fd << buf; buf = 0; 
                 
             }
         }
         fc.get(sim); 
     }
-    cout << endl <<  y << endl;
     if (siz != 7) {
-        fd << buf; cout << (int)buf<<endl;
+        fd << buf; /*cout << (int)buf<<endl;*/
     } // заносим последний (неполный) символ
     
     else siz = -1; //если неполных нет, то незначащие нули в конце не учитываем

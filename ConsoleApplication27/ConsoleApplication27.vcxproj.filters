@@ -21,6 +21,5 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="исходный текст.txt" />
-    <Text Include="..\код.txt" />
   </ItemGroup>
 </Project>

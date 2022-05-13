@@ -143,7 +143,6 @@
     <ClCompile Include="ConsoleApplication27.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\код.txt" />
     <Text Include="исходный текст.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
