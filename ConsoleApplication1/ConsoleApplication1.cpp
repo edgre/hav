@@ -118,7 +118,7 @@ void dec(tree* b, int t, int &weigh)
             for (int i = 7; i >= 0; i--)
             {
                 if (((int)buf!=13||(int)bu!=10)&&(pr == 0 || i >= t)) 
-                    // в последнем остананвливаемся на незначащих нулях
+                    // в последнем остананвливаемся на незначащих нулях 
                 {
                     if (buf & 1 << i) {
                         tmp = tmp->r; /*cout << '1';*/
@@ -236,7 +236,7 @@ int main()
         dec(b,t, mas);// декодируем текст
     
     fc.close();
-    if (proof()) cout << "совпали" << endl;
+    if (proof()) cout << "совпали" << endl;// проверяем  правильность декодирования
     else cout << "не совпали";
     weigh(mas);
     
