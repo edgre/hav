@@ -117,7 +117,7 @@ void dec(tree* b, int t, int &weigh)
             
             for (int i = 7; i >= 0; i--)
             {
-                if (pr == 0 || i >= t) 
+                if (((int)buf!=13||(int)bu!=10)&&(pr == 0 || i >= t)) 
                     // в последнем остананвливаемся на незначащих нулях
                 {
                     if (buf & 1 << i) {
@@ -133,9 +133,9 @@ void dec(tree* b, int t, int &weigh)
 
                 }
             }
-           
             buf = bu;
-            if((int)buf==13) fd.get(buf); weigh++;
+            /*cout << (int)  buf << endl;*/ weigh++;
+
            
            
         }
@@ -166,6 +166,7 @@ bool proof()
     { 
       if (sim != sim1) return false;
         fc.get(sim); fs.get(sim1);
+        
         
     }
     return true;

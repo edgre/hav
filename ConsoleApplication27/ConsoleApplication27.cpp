@@ -224,7 +224,7 @@ int main()
             siz--;
             if (siz < 0)
             {
-                siz = 7; fd << buf; buf = 0; 
+                siz = 7; /*cout << (int)buf << endl;*/ fd << buf; buf = 0;
                 
             }
         }
