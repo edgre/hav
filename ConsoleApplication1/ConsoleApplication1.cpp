@@ -100,14 +100,14 @@ void newnode(tree* b)
     
 }
 
-void dec(tree* b, int t, int &weigh)
+void dec(tree* b, int t, int &weight)
 {
         
         fstream fk("итог.txt", ios::out);
         ifstream fd("C:/Users/Дима и Егор/Source/repos/edgre/hav/код.txt", ios::binary);
         Node* tmp = b->first;
         char buf, bu;
-        fd.get(buf); weigh++;
+        fd.get(buf); weight++;// подсчет числа символов
         int pr = 0;
         bu = 0;
         while (fd)
@@ -134,7 +134,7 @@ void dec(tree* b, int t, int &weigh)
                 }
             }
             buf = bu;
-            /*cout << (int)  buf << endl;*/ weigh++;
+            /*cout << (int)  buf << endl;*/ weight++;
 
            
            
@@ -172,7 +172,7 @@ bool proof()
     return true;
 }
 
-void weigh(int t)
+void weight(int t)
 {
     fstream fs("C:/Users/Дима и Егор/Source/repos/edgre/hav/ConsoleApplication27/исходный текст.txt");
     char buf; int r = 0;
@@ -238,7 +238,7 @@ int main()
     fc.close();
     if (proof()) cout << "совпали" << endl;// проверяем  правильность декодирования
     else cout << "не совпали";
-    weigh(mas);
+    weight(mas);// 
     
     
 
