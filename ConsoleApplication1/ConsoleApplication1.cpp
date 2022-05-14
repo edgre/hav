@@ -181,8 +181,8 @@ void weight(int t)
     {
         r++; fs.get(buf);
     }
-    cout << "исходный файл -" << r * 8 << endl;
-    cout << "сжатый файл -" << t * 8 << endl;
+    cout << "исходный файл -" << r <<" бит"<<  endl;
+    cout << "сжатый файл -" << t<<" бит" << endl;
 
 }
 
