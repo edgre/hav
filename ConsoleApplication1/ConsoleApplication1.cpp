@@ -107,7 +107,7 @@ void dec(tree* b, int t, int &weight)
         ifstream fd("C:/Users/Дима и Егор/Source/repos/edgre/hav/код.txt", ios::binary);
         Node* tmp = b->first;
         char buf, bu;
-        fd.get(buf); weight++;// подсчет числа символов
+        fd.get(buf);// подсчет числа символов
         int pr = 0;
         bu = 0;
         while (fd)
@@ -172,15 +172,9 @@ bool proof()
     return true;
 }
 
-void weight(int t)
+void weight(int t, int r)
 {
-    fstream fs("C:/Users/Дима и Егор/Source/repos/edgre/hav/ConsoleApplication27/исходный текст.txt");
-    char buf; int r = 0;
-    
-    while (fs) 
-    {
-        r++; fs.get(buf);
-    }
+  
     cout << "исходный файл -" << r <<" бит"<<  endl;
     cout << "сжатый файл -" << t<<" бит" << endl;
 
@@ -193,17 +187,24 @@ int main()
     char key; int size;
     int n = 0;
     fstream fc("C:/Users/Дима и Егор/Source/repos/edgre/hav/частоты.txt");
+    int t;
+    fc >> t; // считываем количество незначащих нулей
+        /*cout << t << endl;*/
+    fc.seekg(1, ios::cur);
     fc.get(key);
     fc>>size;
+    int weight1=size;
     // считываем символы исходного текста и их частоты
-    while (key != '|'&&size!='|')
+    while (fc)
     {   
         n++;
         Add(b, size, key);
+        fc.seekg(1, ios::cur);
         fc.get(key);
-        fc>>size;
+        fc >> size;
+        if (fc) { weight1 += size; }
     }
-    int t = n * 2 + 2;
+    
     // формируем дерево
          for (int i = 0; i <= n - 2; i++)
         {
@@ -228,18 +229,13 @@ int main()
         
         }
         fc.close();
-        fc.open("C:/Users/Дима и Егор/Source/repos/edgre/hav/частоты.txt");
-        fc.seekg(-1, ios::end);
-        fc >> t; // считываем количество незначащих нулей
-        /*cout << t << endl;*/
+       
+        
         fc.close(); int mas = 0;
         dec(b,t, mas);// декодируем текст
     
     fc.close();
     if (proof()) cout << "совпали" << endl;// проверяем  правильность декодирования
     else cout << "не совпали";
-    weight(mas);// 
-    
-    
-
+    weight(mas, weight1);
 }

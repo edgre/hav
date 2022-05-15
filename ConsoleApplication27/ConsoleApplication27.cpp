@@ -155,7 +155,8 @@ int main()
     fstream fd("C:/Users/Дима и Егор/Source/repos/edgre/hav/код.txt", ios::out);
     // файл для записи частот исходнго текста
     fstream fd1("C:/Users/Дима и Егор/Source/repos/edgre/hav/частоты.txt", ios::out);
-    /* ненулевые элементы заносим в листья дерева, в ключи мапы и в файл*/  
+    /* ненулевые элементы заносим в листья дерева, в ключи мапы и в файл*/ 
+    fd1 << ' ';
     for (int i = 0; i < 256; i++) 
  
     {
@@ -163,12 +164,12 @@ int main()
         {
             vector <bool> vec;
             mp.insert(pair<char, vector<bool>>(char(i), vec));
-            Add(b, asc[i], (char)i);
-            fd1 << char(i); fd1 << asc[i];
+            Add(b, asc[i], (char)i); 
+            fd1 << ' '; fd1 << char(i); fd1 << asc[i];
             n++;
         }
     }
-    fd1 << "|"; fd1 << '|';
+    
     for (int i = 0; i <= n - 2; i++)
     {
 
@@ -236,6 +237,7 @@ int main()
     
     else siz = -1; //если неполных нет, то незначащие нули в конце не учитываем
     fd.close();
+    fd1.seekp(0, ios::beg);
     fd1 << siz+1;//заносим в файл количество незначащих нулей
     fd1.close(); fd.close();
     
