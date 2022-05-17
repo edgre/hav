@@ -68,7 +68,7 @@ void out(tree* b)
     while (tmp)
     {
         tmp = tmp->next;
-        cout << tmp->key << ' ' << tmp->size;
+        cout << tmp->key << '-' << tmp->size<<' ';
     }
 }
 
