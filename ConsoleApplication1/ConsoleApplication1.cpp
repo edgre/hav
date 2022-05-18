@@ -3,10 +3,12 @@
 #include <string.h>
 #include <map>
 #include <vector>
+#include <locale.h>
 
 using namespace std;
 
 struct Node;
+
 struct Node
 {
     Node* r;
@@ -28,15 +30,6 @@ struct tree
 
 tree::tree() { first = NULL; last = NULL; }
 
-Node::Node(int n, char k)
-{
-    key = '\0';
-    size = n;
-    key[0] = k;
-    r = NULL; l = NULL;
-    next = NULL;
-}
-
 Node::Node(int n, string k)
 {
     size = n;
@@ -45,6 +38,14 @@ Node::Node(int n, string k)
     next = NULL;
 }
 
+Node::Node(int n, char k)
+{
+    key = '\0';
+    size = n;
+    key[0] = k;
+    r = NULL; l = NULL;
+    next = NULL;
+}
 
 void Add(tree* b, int n, char key)
 {
@@ -59,18 +60,6 @@ void Add(tree* b, int n, char key)
     b->last->next = p;
     b->last = p;
 };
-
-void out(tree* b)
-{
-    int u = 0;
-    Node* tmp;
-    tmp = b->first;
-    while (tmp)
-    {
-        tmp = tmp->next;
-        cout << tmp->key << ' ' << tmp->size;
-    }
-}
 
 void swap(Node* a, Node* b, tree* c)
 {
@@ -90,157 +79,163 @@ void swap(Node* a, Node* b, tree* c)
         c->last = a; a->next = NULL;
     }
     b->next = a;
-
-
-}
-
-
-/*функция проходит формирует код символа по дереву*/
-void search(std::map<char, vector<bool>>& mp, char k, Node* tmp)
-{
-    if (tmp->l || tmp->r)
-    {
-
-        if (tmp->l && tmp->l->key.find(k) != -1)
-        {
-            mp[k].push_back(0); tmp = tmp->l;
-        };
-        if (tmp->r && tmp->r->key.find(k) != -1)
-        {
-
-            mp[k].push_back(1); tmp = tmp->r;
-        }
-        search(mp, k, tmp);
-
-    }
-
-
 }
 
 void newnode(tree* b)
-{   // создаем предка для двух узлов с наименьшим весом
+{
     Node* beg = b->first;
-    Node* p = new Node(beg->size + beg->next->size,
-        beg->key + beg->next->key);
+    Node* p = new Node(beg->size + beg->next->size, beg->key + beg->next->key);
 
     p->l = beg;
     p->r = beg->next;
 
     Node* tmp = b->first->next;
-    // помещаем его на нужную позицию
-    while (tmp != b->last && tmp->next->size < p->size)
-        tmp = tmp->next;
+
+    while (tmp != b->last && tmp->next->size < p->size) tmp = tmp->next;
     p->next = tmp->next; tmp->next = p;
     if (tmp == b->last) b->last = p;
     if (!(b->first->next->next)) b->first = p;
     else
         b->first = b->first->next->next;
+    
+}
+
+void dec(tree* b, int t, int &weight)
+{
+        
+        fstream fk("итог.txt", ios::out);
+        ifstream fd("C:/Users/Дима и Егор/Source/repos/edgre/hav/код.txt", ios::binary);
+        Node* tmp = b->first;
+        char buf, bu;
+        fd.get(buf);// подсчет числа символов
+        int pr = 0;
+        bu = 0;
+        while (fd)
+        {
+            if (!(fd.get(bu)))  pr = 1;// проверяем является ли текущий символ последним
+            
+            
+            for (int i = 7; i >= 0; i--)
+            {
+                if (((int)buf!=13||(int)bu!=10)&&(pr == 0 || i >= t)) 
+                    // в последнем остананвливаемся на незначащих нулях 
+                {
+                    if (buf & 1 << i) {
+                        tmp = tmp->r; /*cout << '1';*/
+                    }
+                    else {
+                        tmp = tmp->l; /*cout << '0';*/
+                    }
+                    if (!(tmp->l))
+                    {
+                        fk << tmp->key; tmp = b->first;/*cout << endl*/
+                    }
+
+                }
+            }
+            buf = bu;
+            /*cout << (int)  buf << endl;*/ weight++;
+
+           
+           
+        }
+        
+
+    }
+   
+void out(tree* b)
+{
+    int u = 0;
+    Node* tmp;
+    tmp = b->first;
+    while (tmp)
+    {
+        cout << tmp->key << '-' << tmp->size << ' ';
+        tmp = tmp->next;
+    }
+    
+}
+
+bool proof()
+{
+    fstream fc("итог.txt");
+    fstream fs("C:/Users/Дима и Егор/Source/repos/edgre/hav/ConsoleApplication27/исходный текст.txt");
+    char sim, sim1;
+    fc.get(sim); fs.get(sim1);
+    while (fs || fc)
+    { 
+      if (sim != sim1) return false;
+        fc.get(sim); fs.get(sim1);
+        
+        
+    }
+    return true;
+}
+
+void weight(int t, int r)
+{
+  
+    cout << "исходный файл -" << r <<" бит"<<  endl;
+    cout << "сжатый файл -" << t<<" бит" << endl;
+
 }
 
 int main()
 {
-    int asc[256];
-    int n = 0;
-    for (int i = 0; i < 256; i++) asc[i] = 0;
-    fstream fc("исходный текст.txt");
-    char sim;
-    fc >> sim;
-    while (fc) // заполняем ассоциированный массив
-    {
-        asc[(int)sim]++;
-        fc.get(sim);
-    };
+    setlocale(LC_ALL, "Russian");
     tree* b = new tree;
-    n = 0;
-    map <char, vector<bool>> mp;
-    fstream fd("C:/Users/Дима и Егор/Source/repos/edgre/hav/код.txt", ios::out);
-    // файл для записи частот исходнго текста
-    fstream fd1("C:/Users/Дима и Егор/Source/repos/edgre/hav/частоты.txt", ios::out);
-    /* ненулевые элементы заносим в листья дерева, в ключи мапы и в файл*/
-    fd1 << ' ';
-    for (int i = 0; i < 256; i++)
-
-    {
-        if (asc[i] != 0)
-        {
-            vector <bool> vec;
-            mp.insert(pair<char, vector<bool>>(char(i), vec));
-            Add(b, asc[i], (char)i);
-            fd1 << ' '; fd1 << char(i); fd1 << asc[i];
-            n++;
-        }
-    }
-
-    for (int i = 0; i <= n - 2; i++)
-    {
-
-        Node* tmp = b->first;
-        for (int j = 0; j <= n - 2; j++) // сортируем листья дерева
-        {
-
-            if (tmp->size > tmp->next->size)
-            {
-                Node* t1 = tmp->next;
-                swap(tmp, tmp->next, b);
-                tmp = t1;
-            }
-            tmp = tmp->next;
-
-        }
-    }
-    while (b->first->next != NULL)
-    {
-        newnode(b);
-    }
-
-
-    map<char, vector<bool>>::iterator it = mp.begin();
-    Node* tmp = b->first;
-    // заполняем мапу кодами символов
-    while (it != mp.end())
-    {
-        search(mp, it->first, tmp);
-        /*cout << it->first<<'-';
-        for (int i =0 ; i < mp[it->first].size(); i++)
-            cout << mp[it->first][i];
-        cout << endl;*/
-        it++;
-
-    }
-    char buf = 0;
-    fc.close();
-    fc.open("исходный текст.txt", ios::in);
-
-    it = mp.begin();
-    int siz = 7;
-    fc.get(sim);
-    buf = 0; // начиная справа, формируем символ из получившихся кодов
-
+    char key; int size;
+    int n = 0;
+    fstream fc("C:/Users/Дима и Егор/Source/repos/edgre/hav/частоты.txt");
+    int t;
+    fc >> t; // считываем количество незначащих нулей
+        /*cout << t << endl;*/
+    fc.seekg(1, ios::cur);
+    fc.get(key);
+    fc>>size;
+    int weight1=size;
+    // считываем символы исходного текста и их частоты
     while (fc)
-    {
-        it = mp.find(sim);
-        for (int i = 0; i < mp[it->first].size(); i++)
+    {   
+        n++;
+        Add(b, size, key);
+        fc.seekg(1, ios::cur);
+        fc.get(key);
+        fc >> size;
+        if (fc) { weight1 += size; }
+    }
+    
+    // формируем дерево
+         for (int i = 0; i <= n - 2; i++)
         {
-            buf = buf | mp[it->first][i] << siz;
-            /*cout << mp[it->first][i];*/
-            siz--;
-            if (siz < 0)
+
+            Node* tmp = b->first;
+            for (int j = 0; j <= n - 2; j++)
             {
-                siz = 7; /*cout << (int)buf << endl;*/ fd << buf; buf = 0;
+
+                if (tmp->size > tmp->next->size)
+                {
+                    Node* t1 = tmp->next;
+                    swap(tmp, tmp->next, b);
+                    tmp = t1;
+                }
+                tmp = tmp->next;
 
             }
+        } 
+        while (b -> first->next!= NULL)
+        {
+            newnode(b);
+        
         }
-        fc.get(sim);
-    }
-    if (siz != 7) {
-        fd << buf; /*cout << (int)buf<<endl;*/
-    } // заносим последний (неполный) символ
-
-    else siz = -1; //если неполных нет, то незначащие нули в конце не учитываем
-    fd.close();
-    fd1.seekp(0, ios::beg);
-    fd1 << siz + 1;//заносим в файл количество незначащих нулей
-    fd1.close(); fd.close();
-
-
+        fc.close();
+       
+        
+        fc.close(); int mas = 0;
+        dec(b,t, mas);// декодируем текст
+    
+    fc.close();
+    if (proof()) cout << "совпали" << endl;// проверяем  правильность декодирования
+    else cout << "не совпали";
+    weight(mas, weight1);
 }
