@@ -66,9 +66,10 @@ void out(tree* b)
     Node* tmp;
     tmp = b->first;
     while (tmp)
-    {
+    {   
+        cout << tmp->key <<'-'<< tmp->size<<' ';
         tmp = tmp->next;
-        cout << tmp->key << '-' << tmp->size<<' ';
+        
     }
 }
 
@@ -101,7 +102,7 @@ void search(std::map<char, vector<bool>>& mp, char k, Node* tmp)
     if (tmp->l || tmp->r)
     {
 
-        if (tmp->l&&tmp->l->key.find(k) != -1)
+        if (tmp->l && tmp->l->key.find(k) != -1)
         {
             mp[k].push_back(0); tmp = tmp->l;
         };
@@ -111,7 +112,7 @@ void search(std::map<char, vector<bool>>& mp, char k, Node* tmp)
             mp[k].push_back(1); tmp = tmp->r;
         }
         search(mp, k, tmp);
-        
+
     }
 
 
@@ -122,20 +123,20 @@ void newnode(tree* b)
     Node* beg = b->first;
     Node* p = new Node(beg->size + beg->next->size,
         beg->key + beg->next->key);
-    
+
     p->l = beg;
     p->r = beg->next;
-    
-    Node *tmp = b->first->next;
-   // помещаем его на нужную позицию
-            while (tmp != b->last && tmp->next->size < p->size)
-                tmp = tmp->next;
-            p->next = tmp->next; tmp->next = p;
-            if (tmp == b->last) b->last = p;
-            if (!(b->first->next->next)) b->first = p;
-            else 
-            b->first = b->first->next->next;
-} 
+
+    Node* tmp = b->first->next;
+    // помещаем его на нужную позицию
+    while (tmp != b->last && tmp->next->size < p->size)
+        tmp = tmp->next;
+    p->next = tmp->next; tmp->next = p;
+    if (tmp == b->last) b->last = p;
+    if (!(b->first->next->next)) b->first = p;
+    else
+        b->first = b->first->next->next;
+}
 
 int main()
 {
@@ -147,7 +148,7 @@ int main()
     fc >> sim;
     while (fc) // заполняем ассоциированный массив
     {
-        asc[(int)sim]++; 
+        asc[(int)sim]++;
         fc.get(sim);
     };
     tree* b = new tree;
@@ -156,21 +157,20 @@ int main()
     fstream fd("C:/Users/Дима и Егор/Source/repos/edgre/hav/код.txt", ios::out);
     // файл для записи частот исходнго текста
     fstream fd1("C:/Users/Дима и Егор/Source/repos/edgre/hav/частоты.txt", ios::out);
-    /* ненулевые элементы заносим в листья дерева, в ключи мапы и в файл*/ 
+    /* ненулевые элементы заносим в листья дерева, в ключи мапы и в файл*/
     fd1 << ' ';
-    for (int i = 0; i < 256; i++) 
- 
+    for (int i = 0; i < 256; i++)
+
     {
         if (asc[i] != 0)
         {
             vector <bool> vec;
             mp.insert(pair<char, vector<bool>>(char(i), vec));
-            Add(b, asc[i], (char)i); 
+            Add(b, asc[i], (char)i);
             fd1 << ' '; fd1 << char(i); fd1 << asc[i];
             n++;
         }
     }
-    
     for (int i = 0; i <= n - 2; i++)
     {
 
@@ -187,13 +187,11 @@ int main()
             tmp = tmp->next;
 
         }
-    } 
+    }
     while (b->first->next != NULL)
-    {   
+    {
         newnode(b);
     }
-
-
     map<char, vector<bool>>::iterator it = mp.begin();
     Node* tmp = b->first;
     // заполняем мапу кодами символов
@@ -215,9 +213,9 @@ int main()
     int siz = 7;
     fc.get(sim);
     buf = 0; // начиная справа, формируем символ из получившихся кодов
-    
+
     while (fc)
-    {   
+    {
         it = mp.find(sim);
         for (int i = 0; i < mp[it->first].size(); i++)
         {
@@ -227,21 +225,20 @@ int main()
             if (siz < 0)
             {
                 siz = 7; /*cout << (int)buf << endl;*/ fd << buf; buf = 0;
-                
+
             }
         }
-        fc.get(sim); 
+        fc.get(sim);
     }
     if (siz != 7) {
         fd << buf; /*cout << (int)buf<<endl;*/
     } // заносим последний (неполный) символ
-    
+
     else siz = -1; //если неполных нет, то незначащие нули в конце не учитываем
     fd.close();
     fd1.seekp(0, ios::beg);
-    fd1 << siz+1;//заносим в файл количество незначащих нулей
+    fd1 << siz + 1;//заносим в файл количество незначащих нулей
     fd1.close(); fd.close();
-    
-    
-}
 
+
+}
